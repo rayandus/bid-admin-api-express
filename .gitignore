@@ -30,5 +30,8 @@ lerna-debug.log*
 # IDE - VSCode
 **/.vscode/
 
+# Pnpm store
+**/.pnpm-store/
+
 # envs
 .env
