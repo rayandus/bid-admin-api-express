@@ -1,12 +1,13 @@
 import express, { Router } from 'express';
-import joiValidation from 'express-joi-validation';
+import { validate } from 'express-validation';
 import AuthController from './auth.controller';
 import { loginBodySchema } from './auth.dto';
-
-const validator = joiValidation.createValidator({});
+import AuthService from './auth.service';
 
 const router: Router = express.Router();
 
-router.route('/login').post(validator.body(loginBodySchema), AuthController.login);
+router.route('/login').post(validate({ body: loginBodySchema }), AuthController.login);
+
+router.route('/logout').post(AuthService.checkAuthorization, AuthController.logout);
 
 export default router;

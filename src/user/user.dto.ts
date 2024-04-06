@@ -1,12 +1,11 @@
 import Joi from 'joi';
 
-export interface LoginBodyDto {
+export interface UserBody {
   email: string;
   password: string;
-  hello: Record<string, string>;
 }
 
-export const loginBodySchema = Joi.object<LoginBodyDto>({
+export const userBodySchema = Joi.object<UserBody>({
   email: Joi.string().required(),
   password: Joi.string().required(),
 }).options({

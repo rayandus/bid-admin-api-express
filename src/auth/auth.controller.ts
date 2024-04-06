@@ -1,23 +1,41 @@
-import { LoginBodyDto } from './auth.dto';
-import AuthService, { SignInResponse } from './auth.service';
 import { NextFunction, Request, Response } from 'express';
+import { LoginBodyDto } from './auth.dto';
+import AuthService from './auth.service';
+import { http } from 'winston';
+import createHttpError from 'http-errors';
 
 class AuthController {
   public static login = async (
     req: Request<unknown, unknown, LoginBodyDto>,
     res: Response,
     next: NextFunction,
-  ): Promise<any> => {
+  ): Promise<void> => {
     try {
       const { email, password } = req.body;
 
       const result = await AuthService.login(email, password);
 
-      const r = res.json(result);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  };
 
-      console.log('*** r', r);
+  public static logout = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { email } = req.user || {};
 
-      return r;
+      if (!email) {
+        throw createHttpError.Unauthorized(`Unauthorized ${email} user`);
+      }
+
+      await AuthService.logout(email);
+
+      res.end();
     } catch (err) {
       next(err);
     }

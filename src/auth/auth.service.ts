@@ -1,10 +1,10 @@
 import config from '../common/config';
 import { Request, Response, NextFunction } from 'express';
-import HttpError from 'http-errors';
-import httpStatus from 'http-status';
-import * as jwt from 'jsonwebtoken';
+import createHttpError from 'http-errors';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UserService } from '../user';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
+import { JwtUser } from 'common/types/express';
 
 export interface SignInResponse {
   token: string;
@@ -18,14 +18,14 @@ class AuthService {
 
   public static checkAuthorization = async (
     req: Request,
-    res: Response,
+    _res: Response,
     next: NextFunction,
   ): Promise<any> => {
     try {
       const token = AuthService.extractTokenFromHeader(req);
 
       if (!token) {
-        throw HttpError(httpStatus.UNAUTHORIZED);
+        throw createHttpError.Unauthorized();
       }
 
       const decodedToken = jwt.decode(token) as {
@@ -35,17 +35,20 @@ class AuthService {
       const { email } = decodedToken || {};
 
       if (!email) {
-        throw HttpError(httpStatus.UNAUTHORIZED);
+        throw createHttpError.Unauthorized(`Unauthorized ${email} user`);
       }
 
       const matchedUser = await UserService.findOne(email);
 
       if (!matchedUser?.isLoggedIn) {
-        throw HttpError(httpStatus.UNAUTHORIZED);
+        throw createHttpError.Unauthorized(`Unauthorized ${email} user`);
       }
 
       const payload = jwt.verify(token, config.JWT_SECRET);
-      req['user'] = payload;
+
+      if (typeof payload !== 'string') {
+        req.user = payload as unknown as JwtUser;
+      }
 
       next();
     } catch (err) {
@@ -60,13 +63,13 @@ class AuthService {
     const user = await UserService.getUserWithPasswordHash(email);
 
     if (!user) {
-      throw HttpError(httpStatus.UNAUTHORIZED);
+      throw createHttpError.Unauthorized(`Unauthorized ${email} user`);
     }
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched) {
-      throw HttpError(httpStatus.UNAUTHORIZED);
+      throw createHttpError.Unauthorized(`Unauthorized ${email} user`);
     }
 
     const payload = { sub: user.id, email: user.email, userId: user._id };
