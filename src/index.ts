@@ -6,7 +6,7 @@ import logger, { errorLogHandler, requestLogHandler } from './common/logger';
 import createHttpError from 'http-errors';
 
 const app = express();
-const port = config.PORT || 7071;
+const port = config.PORT || 3000;
 
 const bootstrap = async (): Promise<void> => {
   await mongoose.connect(config.MONGO_DB_CONNSTR, {

@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  app:
+    image: node:20.11.1-alpine
+    # The project directory
+    working_dir: /app
+    volumes:
+      # Copies host project "." to container project dir "app"
+      - .:/app
+      # Creates a separate volume for node_modules
+      # Otherwise, server will not start successfully bec of missing dependencies
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "command -v pnpm >/dev/null 2>&1 || npm install -g pnpm &&
+              pnpm install --frozen-lockfile &&
+              pnpm start:dev"

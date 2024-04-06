@@ -19,6 +19,5 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "typeRoots": ["src/common/types/express.d.ts", "./node_modules/@types"],
   }
 }
