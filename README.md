@@ -34,6 +34,8 @@ For more details on the architecture, authentication flow, plans or to do's, ple
    ```
 
    > The api will run on port `3000` by default with suffix `api`. E.g. `http://localhost:3010/api`
+   >
+   > This also watches and rebuilds the app when there are changes.
 
    or
 
@@ -45,12 +47,15 @@ For more details on the architecture, authentication flow, plans or to do's, ple
 
 1. Or, start the application with Docker. Launch Docker engine as needed.
 
+   a. Launch the app in a docker container
    ```bash
    docker-compose up
    ```
-
-1. 
-
+   
+   b. To rebuild the app when there are changes, open a new terminal or tab
+   ```bash
+   pnpm watch
+   ```
 
 1. Validate if api is working
 
