@@ -1,11 +1,11 @@
 import express, { Router, Request, Response } from 'express';
-import userRouter from './user/user.router';
+import { userRouter } from './user';
 import { authRouter } from './auth';
 
 const appRouter: Router = express.Router();
 
 appRouter.get('/', (_req: Request, res: Response) => {
-  res.json('Hello World Express 2.5!');
+  res.json('Hello World Express 2.12!');
 });
 
 appRouter.use('/auth', authRouter);

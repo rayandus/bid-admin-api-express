@@ -42,28 +42,15 @@ For more details on the architecture, authentication flow, plans or to do's, ple
    ```
 
    > Just replace `PORT=3000` to your choice of port
-   
-   ```bash
-   pnpm watch
-   ```
 
-   > To rebuild the application on file change
-
-1. Or, start the application with Docker
+1. Or, start the application with Docker. Launch Docker engine as needed.
 
    ```bash
-   docker build -t app .
+   docker-compose up
    ```
 
-   > You can replace `app` with any name
+1. 
 
-   ```bash
-   docker run -p 3000:3000 app
-   ```
-
-   > To ensure that the app is accessible from the docker container, map the ports. Left port can be any port. Right port is the default port of the app as it runs in the docker container.
-   >
-   > You can do this `3010:3000`
 
 1. Validate if api is working
 
